@@ -108,6 +108,7 @@
             add() {
                 // var car = {id: this.id, name: this.name, ctime: new Date()};
                 // this.list.push(car);
+                //数据库中添加
                 this.$http.post('/addCar', {car_no: this.id, name: this.name}, {emulateJSON: true}).then(res => {
                     if (res.body.code === 200) {
                         this.getCarList();
@@ -128,13 +129,20 @@
                 });
                 */
                 //第二种方法
-                this.list.findIndex((item, i) => {
-                    // if (item.id === id) {
-                    //     // this.list.splice(i, 1);
-                    //     // return true;
-                    //
-                    // }
-
+                // this.list.findIndex((item, i) => {
+                //     if (item.id === id) {
+                //         // this.list.splice(i, 1);
+                //         // return true;
+                //
+                //     }
+                // });
+                //数据库中删除
+                this.$http.get('/delCar/' + id).then(res=>{
+                    if (res.body.code === 200) {
+                        this.getCarList();
+                    } else {
+                        alert("车辆信息删除失败!!!");
+                    }
                 });
             },
             search(keywords) {
@@ -162,7 +170,7 @@
                     if (res.code === 200) {
                         this.list = res.data
                     } else {
-                        alert("查询失败")
+                        alert("暂无数据或查询失败!!!")
                     }
                 });
             }
