@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>品牌案例</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <link rel="stylesheet" href="/static/css/day02.css">
+    <script type="text/javascript" src="/static/layui/layui.js"></script>
+    <script type="text/javascript" src="/static/js/vue.js"></script>
+    <script type="text/javascript" src="/static/js/vue-resource.js"></script>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="header">
+        <label class="h_left">添加品牌</label>
+    </div>
+    <hr class="layui-bg-green">
+    <div class="content">
+        <div class="layui-row layui-form-item">
+            <label class="layui-label">Id：</label>
+            <div class="layui-input-inline">
+                <input type="text" v-model="id" class="layui-input">
+            </div>
+            <label class="layui-label">Name：</label>
+            <div class="layui-input-inline">
+                <input type="text" v-model="name" class="layui-input" @keyup.f2
+                        ="add">
+            </div>
+            <button class="btn layui-btn layui-btn-normal" @click="add">添加</button>
+            <label class="layui-label">搜索关键字：</label>
+            <div class="layui-input-inline">
+                <input type="text" v-model="keywords" class="layui-input" v-focus v-color="'red'">
+            </div>
+        </div>
+        <hr class="layui-bg-green">
+        <div class="layui-row">
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th>id</th>
+                    <th>品牌名称</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-cloak v-for="item in search(keywords)">
+                    <td>{{item.car_no}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.ctime | dateFormat('yyyy-mm-dd hh:dd:ss')}}</td>
+                    <td><a href="#" @click.prevent="del(item.id)">删除</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    //全局过滤器
+    Vue.filter('dateFormat', function (dateStr, pattern = "") {
+        var dt = new Date(dateStr);
+        var y = dt.getFullYear();
+        var m = dt.getMonth() + 1;
+        var d = dt.getDate();
+
+        if (!pattern || pattern.toLowerCase() != 'yyyy-mm-dd') {
+            var hh = dt.getHours();
+            var mm = dt.getMinutes();
+            var ss = dt.getSeconds();
+            return `${y}-${m}-${d} ${hh}:${mm}:${ss}`
+        } else {
+            return `${y}-${m}-${d}`
+        }
+
+    });
+
+    //自定义按键修饰符
+    Vue.config.keyCodes.f2 = 113;
+
+    //自定义全局指令
+    Vue.directive('focus', {
+        inserted: function (el) {
+            el.focus();
+        }
+    })
+
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            id: '',
+            name: '',
+            keywords: '',
+            list: [
+                // {id: 1, name: "66666666666666666666666666", ctime: new Date()},
+                // {id: 2, name: "奔驰", ctime: new Date()},
+            ]
+        },
+        created() {
+            this.getCarList();
+        },
+        methods: {
+            add() {
+                // var car = {id: this.id, name: this.name, ctime: new Date()};
+                // this.list.push(car);
+                this.$http.post('/addCar', {car_no: this.id, name: this.name}, {emulateJSON: true}).then(res => {
+                    if (res.body.code === 200) {
+                        this.getCarList();
+                        this.id = this.name = '';
+                    } else {
+                        alert("添加汽车信息失败");
+                    }
+                });
+            },
+            del(id) {
+                /*
+                //第一种方法
+                this.list.some((item,i)=>{
+                    if (item.id === id) {
+                        this.list.splice(i,1);
+                        return true;
+                    }
+                });
+                */
+                //第二种方法
+                this.list.findIndex((item, i) => {
+                    // if (item.id === id) {
+                    //     // this.list.splice(i, 1);
+                    //     // return true;
+                    //
+                    // }
+
+                });
+            },
+            search(keywords) {
+                /*
+                //第一种方法
+                var newList = [];
+                this.list.forEach(item => {
+                    if (item.name.indexOf(keywords) != -1) {
+                        newList.push(item);
+                    }
+                });
+
+                return newList;
+                */
+                //第二种方法
+                return this.list.filter(item => {
+                    if (item.name.includes(keywords)) {
+                        return item;
+                    }
+                });
+            },
+            getCarList() {
+                this.$http.get('/carList').then(res => {
+                    var res = res.body
+                    if (res.code === 200) {
+                        this.list = res.data
+                    } else {
+                        alert("查询失败")
+                    }
+                });
+            }
+        },
+        //局部自定义指令
+        directives: {
+            color: {
+                inserted: function (el, binding) {
+                    el.style.color = binding.value;
+                }
+            }
+        }
+    });
+</script>
+</html>

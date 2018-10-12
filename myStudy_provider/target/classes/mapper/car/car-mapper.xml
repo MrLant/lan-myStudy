@@ -1,0 +1,33 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lan.dao.CarDao">
+    <resultMap id="BaseResultMap" type="com.lan.pojo.Car">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="car_no" property="car_no" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="ctime" property="ctime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="base_column">
+        id,car_no,`name`,ctime
+    </sql>
+
+    <select id="getCarList" resultMap="BaseResultMap">
+        select
+        <include refid="base_column"/>
+        from car
+    </select>
+
+    <insert id="addCar" parameterType="com.lan.pojo.Car">
+        insert into car
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="car_no !=null and car_no != ''">car_no,</if>
+            <if test="name !=null and name != ''">`name`,</if>
+            <if test="ctime !=null">ctime</if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="car_no !=null and car_no != ''">#{car_no},</if>
+            <if test="name !=null and name != ''">#{name},</if>
+            <if test="ctime !=null">#{ctime}</if>
+        </trim>
+    </insert>
+</mapper>

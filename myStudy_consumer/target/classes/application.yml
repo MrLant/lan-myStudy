@@ -1,0 +1,25 @@
+#编写springboot的配置信息
+server:
+  port: 8080
+  context-path: /
+
+spring:
+  thymeleaf:
+      cache: false
+      prefix: classpath:/templates/
+      suffix: .html
+      encoding: UTF-8
+      content-type: text/html
+      mode: HTML5
+
+  dubbo:
+    application:
+      name: Consumer
+      timeout: 6000 #超时时间
+
+    registry:
+      address: zookeeper://127.0.0.1:2181
+    protocol:
+      name: dubbo
+      port: 20881
+    scan: com.lan.controller

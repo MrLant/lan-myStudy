@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>跑马灯效果</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <script type="text/javascript" src="/static/layui/layui.js"></script>
+    <script type="text/javascript" src="/static/js/vue.js"></script>
+</head>
+<body>
+<div id="app" class="layui-fluid">
+    <div class="layui-row" style="margin-top: 20px; margin-left: 50px">
+        <button class="layui-btn layui-btn-normal layui-btn-radius layui-btn-sm" @click="start">开始</button>
+        <button class="layui-btn layui-btn-danger layui-btn-radius layui-btn-sm" @click="stop">停止</button>
+        <div style="padding: 10px"></div>
+        <h3 style="color: #0000FF">{{msg}}</h3>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            msg: '猥琐发育,别浪.稳住,我们能赢!!!',
+            sid: null
+        },
+        methods: {
+            start() {
+                if (this.sid != null) {
+                    return;
+                }
+                var that = this;
+                var sid = setInterval(function () {
+                    var start = that.msg.substring(0, 1);
+                    var end = that.msg.substring(1);
+                    that.msg = end + start;
+                }, 200);
+                this.sid = sid;
+            },
+            stop() {
+                clearInterval(this.sid);
+                this.sid = null;
+            }
+        }
+    });
+</script>
+</html>

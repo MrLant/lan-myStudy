@@ -1,0 +1,45 @@
+#编写springboot的配置信息
+spring:
+  dubbo:
+    application:
+      name: Provider
+      delay: -1 #延迟注册服务时间(毫秒)- ，设为-1时，表示延迟到Spring容器初始化完成时暴露服务
+      timeout: 12000 #超时时间
+      retries: 0 #重试次数
+    registry:
+      address: zookeeper://127.0.0.1:2181
+    protocol:
+      name: dubbo
+      port: 20881
+    scan: com.lan.service
+
+#配置数据源
+  datasource:
+    url: jdbc:mysql://192.168.189.128:3306/myStudy?characterEncoding=utf8&useSSL=false
+    username: lanwei
+    password: Lanwei258!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    filters: stat
+    maxActive: 20
+    initialSize: 1
+    maxWait: 6000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: false
+    maxOpenPreparedStatements: 20
+
+#mybatis配置
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+
+#打印sql语句
+logging:
+  level:
+    com.lan.dao: debug
+

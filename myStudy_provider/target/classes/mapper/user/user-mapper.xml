@@ -1,0 +1,21 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lan.dao.UserDao">
+
+    <resultMap id="BaseResultMap" type="com.lan.pojo.User">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="username" property="username" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="base_column">
+        id,username,`name`
+    </sql>
+    <select id="getUser" resultMap="BaseResultMap">
+        SELECT <include refid="base_column" />
+        FROM
+        `user`
+        <where>
+            del = 0
+        </where>
+    </select>
+</mapper>
