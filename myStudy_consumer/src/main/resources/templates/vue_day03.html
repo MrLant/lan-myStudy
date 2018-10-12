@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>过渡动画</title>
+    <script type="text/javascript" src="/static/js/vue.js"></script>
+    <style type="text/css">
+        .v-enter,
+        .v-leave-to {
+            opacity: 0;
+            transform: translatex(150px);
+        }
+        .v-enter-active,
+        .v-leave-active {
+            transition: all 0.8s ease;
+        }
+    </style>
+</head>
+<body>
+<div id="demo">
+    <button @click="show = !show">
+        Toggle
+    </button>
+    <!--使用自定义前缀 在transition添加name属性，然后替换<style></style>中的v-->
+    <transition>
+        <p v-if="show">hello</p>
+    </transition>
+</div>
+</body>
+<script type="text/javascript">
+    var vm = new Vue({
+        el: '#demo',
+        data: {
+            show: false
+        }
+    })
+</script>
+</html>

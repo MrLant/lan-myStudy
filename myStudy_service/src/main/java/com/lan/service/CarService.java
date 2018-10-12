@@ -8,4 +8,6 @@ public interface CarService {
     List<Car> getCarList();
 
     boolean addCar(Car carInfo);
+
+    boolean delCar(String car_no);
 }

@@ -42,4 +42,15 @@ public class CarServiceImpl implements CarService {
         }
         return false;
     }
+
+    @Override
+    public boolean delCar(String car_no) {
+        try {
+            carDao.delCar(car_no);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

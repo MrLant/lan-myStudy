@@ -30,4 +30,11 @@
             <if test="ctime !=null">#{ctime}</if>
         </trim>
     </insert>
+
+    <delete id="delCar" parameterType="string">
+        delete from car
+        <where>
+            <if test="car_no !=null and car_no != ''">car_no =#{car_no}</if>
+        </where>
+    </delete>
 </mapper>
